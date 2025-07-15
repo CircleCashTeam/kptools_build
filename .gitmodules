@@ -1,0 +1,6 @@
+[submodule "src/kp"]
+	path = src/kp
+	url = https://github.com/bmax121/KernelPatch
+[submodule "src/zlib"]
+	path = src/zlib
+	url = https://android.googlesource.com/platform/external/zlib
