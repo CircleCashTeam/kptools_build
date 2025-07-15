@@ -1,0 +1,38 @@
+From 1de14229804c0bd9eecf93ec8368c1df21b73597 Mon Sep 17 00:00:00 2001
+From: affggh <879632264@qq.com>
+Date: Tue, 15 Jul 2025 15:24:28 +0800
+Subject: [PATCH] cmake: disable unused target
+
+---
+ CMakeLists.txt | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 66f7d04..f450b62 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -249,11 +249,12 @@ if(MINGW)
+     set(ZLIB_DLL_SRCS ${CMAKE_CURRENT_BINARY_DIR}/zlib1rc.obj)
+ endif(MINGW)
+ 
+-add_library(zlib SHARED ${ZLIB_SRCS} ${ZLIB_DLL_SRCS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
++#add_library(zlib SHARED ${ZLIB_SRCS} ${ZLIB_DLL_SRCS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
+ add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
+-set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
+-set_target_properties(zlib PROPERTIES SOVERSION 1)
++#set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
++#set_target_properties(zlib PROPERTIES SOVERSION 1)
+ 
++if (DUMMY)
+ if(NOT CYGWIN)
+     # This property causes shared libraries on Linux to have the full version
+     # encoded into their final filename.  We disable this on Cygwin because
+@@ -378,3 +379,4 @@ if (BUILD_MINIGZIP)
+   add_executable(minigzip_bin test/minigzip.c)
+   target_link_libraries(minigzip_bin zlib)
+ endif()
++endif() # DUMMY
+\ No newline at end of file
+-- 
+2.43.0
+

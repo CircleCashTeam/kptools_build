@@ -1,0 +1,66 @@
+From 4d2232f954aca2a026481bc73f353f1470c192a0 Mon Sep 17 00:00:00 2001
+From: affggh <879632264@qq.com>
+Date: Tue, 15 Jul 2025 15:21:03 +0800
+Subject: [PATCH 2/2] tools: fit windows ul -> ull
+
+---
+ tools/common.h  |  4 ++++
+ tools/kallsym.c | 20 +-------------------
+ 2 files changed, 5 insertions(+), 19 deletions(-)
+
+diff --git a/tools/common.h b/tools/common.h
+index 37fe969..8a0255c 100644
+--- a/tools/common.h
++++ b/tools/common.h
+@@ -12,6 +12,10 @@
+ #include <errno.h>
+ #include <stdbool.h>
+ 
++#ifdef _WIN32
++#include <str_compat.h>
++#endif
++
+ #include <string.h>
+ 
+ extern bool log_enable;
+diff --git a/tools/kallsym.c b/tools/kallsym.c
+index 3b89a30..a9824c7 100644
+--- a/tools/kallsym.c
++++ b/tools/kallsym.c
+@@ -21,24 +21,6 @@
+ #define IKCFG_ED "IKCFG_ED"
+ #include "zlib.h"
+ 
+-#ifdef _WIN32
+-#include <string.h>
+-static void *memmem(const void *haystack, size_t haystack_len, const void *const needle, const size_t needle_len)
+-{
+-    if (haystack == NULL) return NULL; // or assert(haystack != NULL);
+-    if (haystack_len == 0) return NULL;
+-    if (needle == NULL) return NULL; // or assert(needle != NULL);
+-    if (needle_len == 0) return NULL;
+-
+-    for (const char *h = haystack; haystack_len >= needle_len; ++h, --haystack_len) {
+-        if (!memcmp(h, needle, needle_len)) {
+-            return (void *)h;
+-        }
+-    }
+-    return NULL;
+-}
+-#endif
+-
+ static int find_linux_banner(kallsym_t *info, char *img, int32_t imglen)
+ {
+     /*
+@@ -62,7 +44,7 @@ static int find_linux_banner(kallsym_t *info, char *img, int32_t imglen)
+         if (isdigit(*(banner + prefix_len)) && *(banner + prefix_len + 1) == '.') {
+             info->linux_banner_offset[info->banner_num++] = (int32_t)(banner - img);
+             tools_logi("linux_banner %d: %s", info->banner_num, banner);
+-            tools_logi("linux_banner offset: 0x%lx\n", banner - img);
++            tools_logi("linux_banner offset: 0x%llx\n", (unsigned long long)(banner - img));
+         }
+     }
+     banner = img + info->linux_banner_offset[info->banner_num - 1];
+-- 
+2.43.0
+
