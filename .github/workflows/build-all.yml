@@ -30,7 +30,7 @@ jobs:
             artifact_name: mingw32-i686-ucrt
           - target: x86_64-w64-mingw32
             libc: ucrt
-            artifact_name: mingw64-x86_64-ucrt
+            artifact_name: mingw32-x86_64-ucrt
           - target: i686-w64-mingw32
             libc: msvcrt
             artifact_name: mingw32-i686-msvcrt
@@ -52,6 +52,7 @@ jobs:
         submodules: true
 
     - name: Cache LLVM-Mingw
+      if: contains(matrix.target, 'mingw32-')
       uses: actions/cache@v3
       id: cache-llvm-mingw
       with:
@@ -62,7 +63,7 @@ jobs:
           llvm-mingw-${{ env.LLVM_MINGW_VERSION }}-
     
     - name: Download and extract LLVM-Mingw
-      if: steps.cache-llvm-mingw.outputs.cache-hit != 'true'
+      if: steps.cache-llvm-mingw.outputs.cache-hit != 'true' && contains(matrix.target, 'mingw32-')
       run: |
         url="https://github.com/mstorsjo/llvm-mingw/releases/download/${{env.LLVM_MINGW_VERSION}}/llvm-mingw-${{env.LLVM_MINGW_VERSION}}-${{matrix.libc}}-ubuntu-22.04-x86_64.tar.xz"
         echo "Downloading: $url"
@@ -75,6 +76,7 @@ jobs:
         echo "LLVM-Mingw installed to: ${{ runner.tool_cache }}/llvm-mingw-${{ env.LLVM_MINGW_VERSION }}-${{ matrix.libc }}"
     
     - name: Setup environment variables
+      if: contains(matrix.target, 'mingw32-')
       run: |
         LLVM_MINGW_DIR="${{ runner.tool_cache }}/llvm-mingw-${{ env.LLVM_MINGW_VERSION }}-${{ matrix.libc }}"
         echo "LLVM_MINGW_DIR=$LLVM_MINGW_DIR" >> $GITHUB_ENV
