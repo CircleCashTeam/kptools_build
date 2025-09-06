@@ -124,9 +124,17 @@ jobs:
     - name: Setup NDK toolchain
       if: ${{matrix.libc}} == 'bionic'
       uses: nttld/setup-ndk@v1
+      id: setup-ndk
       with:
         ndk-version: r21e
         local-cache: true
+
+    - name: Setup NDK toolchain variable
+      if: ${{matrix.libc}} == 'bionic'
+      env:
+        ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+      run: |
+        echo "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
     
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -134,16 +142,17 @@ jobs:
       run: |
         if [ "${{matrix.libc}}" == "msvcrt" ] || [ "${{matrix.libc}}" == "ucrt" ]; then
           SYSTEM=Windows
-          export CC="{{matrix.target}}-clang"
-          export CC="{{matrix.target}}-clang++"
+          export CC="${{matrix.target}}-clang"
+          export CC="${{matrix.target}}-clang++"
         elif [ "${{matrix.libc}}" == "bionic" ]; then
           SYSTEM=Android
+          
           export CC="${{matrix.target}}21-clang"
           export CC="${{matrix.target}}21-clang++"
         else
           SYSTEM=Linux
-          export CC="{{matrix.target}}-gcc"
-          export CXX="{{matrix.target}}-g++"
+          export CC="${{matrix.target}}-gcc"
+          export CXX="${{matrix.target}}-g++"
         fi
       
         cmake -B "${{github.workspace}}/build" \
