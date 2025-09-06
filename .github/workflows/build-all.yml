@@ -143,12 +143,11 @@ jobs:
         if [ "${{matrix.libc}}" == "msvcrt" ] || [ "${{matrix.libc}}" == "ucrt" ]; then
           SYSTEM=Windows
           export CC="${{matrix.target}}-clang"
-          export CC="${{matrix.target}}-clang++"
+          export CXX="${{matrix.target}}-clang++"
         elif [ "${{matrix.libc}}" == "bionic" ]; then
           SYSTEM=Android
-          
           export CC="${{matrix.target}}21-clang"
-          export CC="${{matrix.target}}21-clang++"
+          export CXX="${{matrix.target}}21-clang++"
         else
           SYSTEM=Linux
           export CC="${{matrix.target}}-gcc"
