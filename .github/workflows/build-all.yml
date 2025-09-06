@@ -52,7 +52,7 @@ jobs:
         submodules: true
 
     - name: Cache LLVM-Mingw
-      if: contains(matrix.target, 'mingw32-')
+      if: contains(matrix.target, 'mingw32')
       uses: actions/cache@v3
       id: cache-llvm-mingw
       with:
@@ -63,7 +63,7 @@ jobs:
           llvm-mingw-${{ env.LLVM_MINGW_VERSION }}-
     
     - name: Download and extract LLVM-Mingw
-      if: steps.cache-llvm-mingw.outputs.cache-hit != 'true' && contains(matrix.target, 'mingw32-')
+      if: steps.cache-llvm-mingw.outputs.cache-hit != 'true' && contains(matrix.target, 'mingw32')
       run: |
         url="https://github.com/mstorsjo/llvm-mingw/releases/download/${{env.LLVM_MINGW_VERSION}}/llvm-mingw-${{env.LLVM_MINGW_VERSION}}-${{matrix.libc}}-ubuntu-22.04-x86_64.tar.xz"
         echo "Downloading: $url"
@@ -76,7 +76,7 @@ jobs:
         echo "LLVM-Mingw installed to: ${{ runner.tool_cache }}/llvm-mingw-${{ env.LLVM_MINGW_VERSION }}-${{ matrix.libc }}"
     
     - name: Setup environment variables
-      if: contains(matrix.target, 'mingw32-')
+      if: contains(matrix.target, 'mingw32')
       run: |
         LLVM_MINGW_DIR="${{ runner.tool_cache }}/llvm-mingw-${{ env.LLVM_MINGW_VERSION }}-${{ matrix.libc }}"
         echo "LLVM_MINGW_DIR=$LLVM_MINGW_DIR" >> $GITHUB_ENV
@@ -95,7 +95,7 @@ jobs:
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
-        if [ "${{matrix.libc}}" == "msvcrt" ] || [ "${{matrix.libc}}" == "ucrt" ];
+        if [ "${{matrix.libc}}" == "msvcrt" ] || [ "${{matrix.libc}}" == "ucrt" ]; then
           COMPILER=clang
         else
           COMPILER=gcc
