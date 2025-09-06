@@ -22,17 +22,25 @@ else()
         COMMENT "Resetting Git submodule in src/ to its recorded commit hash"
         VERBATIM
     )
+
+    # Reset all submodules
+    message(STATUS reset submodules...)
+    execute_process(
+        COMMAND git submodule foreach "git reset --hard"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        RESULT_VARIABLE RESULT
+    )
     foreach(PATCH ${PATCH_FILES})
         string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/patches" 
                       "${CMAKE_CURRENT_SOURCE_DIR}/src" 
                       PATCH_DEST_DIR ${PATCH})
         get_filename_component(PATCH_DEST_DIR ${PATCH_DEST_DIR} DIRECTORY)
 
-        execute_process(
-            COMMAND git submodule update --init --force ${PATCH_DEST_DIR}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE RESULT
-        )
+        #execute_process(
+        #    COMMAND git submodule update --init --force ${PATCH_DEST_DIR}
+        #    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        #    RESULT_VARIABLE RESULT
+        #)
         execute_process(
             COMMAND patch -p1 -i ${PATCH} -d ${PATCH_DEST_DIR}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
