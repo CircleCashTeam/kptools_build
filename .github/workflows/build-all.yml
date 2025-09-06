@@ -221,11 +221,6 @@ jobs:
       with:
         submodules: true
 
-    - name: Setup macOS dependencies
-      run: |
-        brew update
-        brew install pkg-config cmake
-
     - name: Configure CMake
       run: |
         cmake -B "${{github.workspace}}/build" \
