@@ -195,7 +195,7 @@ jobs:
         emcmake cmake -B "${{github.workspace}}/build" \
         -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" \
         -DPREFER_STATIC_LINKING=${{env.PREFER_STATIC_LINKING}} \
-        -DCMAKE_EXE_LINKER_FLAGS="-sFORCE_FILESYSTEM -sALLOW_MEMORY_GROWTH=1 -lproxyfs.js -lidbfs.js -sWASM=1 -sMODULARIZE=1 -sEXPORT_NAME=magiskboot -sEXPORTED_RUNTIME_METHODS=\"['FS','PROXYFS','out','err','ccall','cwrap','setValue','getValue','UTF8ToString','UTF8ArrayToString','stringToUTF8Array','FS_createPath','FS_createDataFile','removeRunDependency','addRunDependency','addFunction','safeSetTimeout','runtimeKeepalivePush','runtimeKeepalivePop','maybeExit','wasmMemory','callMain']\"" \
+        -DCMAKE_EXE_LINKER_FLAGS="-sFORCE_FILESYSTEM -sALLOW_MEMORY_GROWTH=1 -lproxyfs.js -lidbfs.js -sWASM=1 -sMODULARIZE=1 -sEXPORT_NAME=kptools -sEXPORTED_RUNTIME_METHODS=\"['FS','PROXYFS','out','err','ccall','cwrap','setValue','getValue','UTF8ToString','UTF8ArrayToString','stringToUTF8Array','FS_createPath','FS_createDataFile','removeRunDependency','addRunDependency','addFunction','safeSetTimeout','runtimeKeepalivePush','runtimeKeepalivePop','maybeExit','wasmMemory','callMain']\"" \
 
     - name: Build
       run: |
