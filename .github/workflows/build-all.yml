@@ -227,7 +227,8 @@ jobs:
         -DCMAKE_C_FLAGS="-arch ${{matrix.arch}}" \
         -DCMAKE_CXX_FLAGS="-arch ${{matrix.arch}}" \
         -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" \
-        -DPREFER_STATIC_LINKING=${{env.PREFER_STATIC_LINKING}}
+        -DPREFER_STATIC_LINKING=OFF
+        # macos seems not support static link
         
     - name: Build
       run: |
