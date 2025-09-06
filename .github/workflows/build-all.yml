@@ -28,23 +28,29 @@ jobs:
           - target: i686-w64-mingw32
             libc: ucrt
             artifact_name: mingw32-i686-ucrt
+            arch: i686
           - target: x86_64-w64-mingw32
             libc: ucrt
             artifact_name: mingw32-x86_64-ucrt
+            arch: x86_64
           - target: i686-w64-mingw32
             libc: msvcrt
             artifact_name: mingw32-i686-msvcrt
+            arch: i686
           - target: x86_64-w64-mingw32
             libc: msvcrt
             artifact_name: mingw32-x86_64-msvcrt
+            arch: x86_64
             
           # Linux target
           - target: x86_64-linux-musl
             libc: musl
             artifact_name: linux-x86_64-musl
+            arch: x86_64
           - target: aarch64-linux-musl
             libc: musl
             artifact_name: linux-aarch64-musl
+            arch: aarch64
 
     steps:
     - uses: actions/checkout@v5
@@ -95,7 +101,7 @@ jobs:
       if: contains(matrix.target, 'musl')
       uses: arceos-org/setup-musl@v1
       with:
-        arch: ${{ matrix.target.split('-')[0] }}
+        arch: ${{martix.arch}}
     
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
