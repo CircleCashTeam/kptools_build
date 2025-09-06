@@ -122,7 +122,7 @@ jobs:
         arch: ${{matrix.arch}}
 
     - name: Setup NDK toolchain
-      if: ${{matrix.libc}} == 'bionic'
+      if: matrix.libc == 'bionic'
       uses: nttld/setup-ndk@v1
       id: setup-ndk
       with:
@@ -130,7 +130,7 @@ jobs:
         local-cache: true
 
     - name: Setup NDK toolchain variable
-      if: ${{matrix.libc}} == 'bionic'
+      if: matrix.libc == 'bionic'
       env:
         ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
       run: |
