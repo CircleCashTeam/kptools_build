@@ -129,7 +129,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{matrix.target}}-kptools
+        name: ${{matrix.artifact_name}}-kptools
         path: |
           build/kptools*
 
