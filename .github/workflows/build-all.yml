@@ -138,8 +138,8 @@ jobs:
           export CC="{{matrix.target}}-clang++"
         elif [ "${{matrix.libc}}" == "bionic" ]; then
           SYSTEM=Android
-          export CC="${{martix.target}}21-clang"
-          export CC="${{martix.target}}21-clang++"
+          export CC="${{matrix.target}}21-clang"
+          export CC="${{matrix.target}}21-clang++"
         else
           SYSTEM=Linux
           export CC="{{matrix.target}}-gcc"
