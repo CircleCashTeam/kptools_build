@@ -26,26 +26,26 @@ jobs:
         os: [ubuntu-latest]
         include:
           # Windows target
-          - os: ubuntu-latest
-            target: i686-w64-mingw32
+          - target: i686-w64-mingw32
             libc: ucrt
-          - os: ubuntu-latest
-            target: x86_64-w64-mingw32
+            artifact_name: win32-ucrt
+          - target: x86_64-w64-mingw32
             libc: ucrt
-          - os: ubuntu-latest
-            target: i686-w64-mingw32
+            artifact_name: win64-ucrt
+          - target: i686-w64-mingw32
             libc: msvcrt
-          - os: ubuntu-latest
-            target: x86_64-w64-mingw32
+            artifact_name: win32-msvcrt
+          - target: x86_64-w64-mingw32
             libc: msvcrt
+            artifact_name: win64-msvcrt
             
           # Linux target
-          - os: ubuntu-latest
-            target: x86_64-linux-musl
+          - target: x86_64-linux-musl
             libc: musl
-          - os: ubuntu-latest
-            target: aarch64-linux-musl
+            artifact_name: linux-x86_64-musl
+          - target: aarch64-linux-musl
             libc: musl
+            artifact_name: linux-aarch64-musl
 
     steps:
     - uses: actions/checkout@v5
