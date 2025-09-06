@@ -52,6 +52,24 @@ jobs:
             artifact_name: linux-aarch64-musl
             arch: aarch64
 
+          # Android target
+          - target: aarch64-linux-android
+            libc: bionic
+            artifact_name: android-aarch64
+            arch: aarch64
+          - target: armv7a-linux-androideabi
+            libc: bionic
+            artifact_name: android-armv7a
+            arch: armv7a
+          - target: i686-linux-android
+            libc: bionic
+            artifact_name: android-i686
+            arch: i686
+          - target: x86_64-linux-android
+            libc: bionic
+            artifact_name: android-x86_64
+            arch: x86_64
+
     steps:
     - uses: actions/checkout@v5
       with:
@@ -102,21 +120,32 @@ jobs:
       uses: arceos-org/setup-musl@v1
       with:
         arch: ${{matrix.arch}}
+
+    - name: Setup NDK toolchain
+      if: ${{matrix.libc}} == 'bionic'
+      uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r21e
+        local-cache: true
     
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         if [ "${{matrix.libc}}" == "msvcrt" ] || [ "${{matrix.libc}}" == "ucrt" ]; then
-          COMPILER=clang
           SYSTEM=Windows
+          export CC="{{matrix.target}}-clang"
+          export CC="{{matrix.target}}-clang++"
+        elif [ "${{matrix.libc}}" == "bionic" ]; then
+          SYSTEM=Android
+          export CC="${{martix.target}}21-clang"
+          export CC="${{martix.target}}21-clang++"
         else
-          COMPILER=gcc
           SYSTEM=Linux
+          export CC="{{matrix.target}}-gcc"
+          export CXX="{{matrix.target}}-g++"
         fi
       
-        CC="${{matrix.target}}-$COMPILER" \
-        CXX="${{matrix.target}}-$COMPILER++" \
         cmake -B "${{github.workspace}}/build" \
         -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" \
         -DPREFER_STATIC_LINKING=${{env.PREFER_STATIC_LINKING}} \
