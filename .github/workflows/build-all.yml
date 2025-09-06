@@ -237,7 +237,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{matrix.arch}}-macos-kptools
+        name: macos-${{matrix.arch}}-kptools
         path: |
           build/kptools*
 
