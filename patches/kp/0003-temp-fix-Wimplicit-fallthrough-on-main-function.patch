@@ -1,0 +1,24 @@
+From e371cf886353f58a8518c846f67d8dae294060a1 Mon Sep 17 00:00:00 2001
+From: affggh <879632264@qq.com>
+Date: Sat, 6 Sep 2025 11:03:33 +0800
+Subject: [PATCH] temp fix -Wimplicit-fallthrough on main function
+
+---
+ tools/kptools.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/kptools.c b/tools/kptools.c
+index a322141..441da70 100644
+--- a/tools/kptools.c
++++ b/tools/kptools.c
+@@ -139,6 +139,7 @@ int main(int argc, char *argv[])
+             break;
+         case 'S':
+             root_skey = true;
++            break;
+         case 's':
+             superkey = optarg;
+             break;
+-- 
+2.51.0
+
