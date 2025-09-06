@@ -109,13 +109,18 @@ jobs:
       run: |
         if [ "${{matrix.libc}}" == "msvcrt" ] || [ "${{matrix.libc}}" == "ucrt" ]; then
           COMPILER=clang
+          SYSTEM=Windows
         else
           COMPILER=gcc
+          SYSTEM=Linux
         fi
       
         CC="${{matrix.target}}-$COMPILER" \
         CXX="${{matrix.target}}-$COMPILER++" \
-        cmake -B "${{github.workspace}}/build" -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" -DPREFER_STATIC_LINKING=${{env.PREFER_STATIC_LINKING}}
+        cmake -B "${{github.workspace}}/build" \
+        -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" \
+        -DPREFER_STATIC_LINKING=${{env.PREFER_STATIC_LINKING}} \
+        -DCMAKE_SYSTEM_NAME=$SYSTEM
 
     - name: Build
       # Build your program with the given configuration
