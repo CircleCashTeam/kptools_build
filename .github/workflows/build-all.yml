@@ -33,6 +33,14 @@ jobs:
             libc: ucrt
             artifact_name: mingw32-x86_64-ucrt
             arch: x86_64
+          - target: armv7-w64-mingw32
+            libc: ucrt
+            artifact_name: mingw32-armv7-ucrt
+            arch: armv7
+          - target: aarch64-w64-mingw32
+            libc: ucrt
+            artifact_name: mingw32-aarch64-ucrt
+            arch: aarch64
           - target: i686-w64-mingw32
             libc: msvcrt
             artifact_name: mingw32-i686-msvcrt
@@ -41,7 +49,15 @@ jobs:
             libc: msvcrt
             artifact_name: mingw32-x86_64-msvcrt
             arch: x86_64
-            
+          - target: armv7-w64-mingw32
+            libc: msvcrt
+            artifact_name: mingw32-armv7-msvcrt
+            arch: armv7
+          - target: aarch64-w64-mingw32
+            libc: msvcrt
+            artifact_name: mingw32-aarch64-msvcrt
+            arch: aarch64
+          
           # Linux target
           - target: x86_64-linux-musl
             libc: musl
