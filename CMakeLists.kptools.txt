@@ -11,6 +11,10 @@ set(SOURCES
 	src/kp/tools/sha256.c
 )
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    list(APPEND SOURCES "src/get_kpm_info.cc")
+endif()
+
 # preset.h
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/src/kp/kernel/include/preset.h"
@@ -22,7 +26,6 @@ add_executable(kptools ${SOURCES})
 target_compile_options(
     kptools
     PUBLIC
-    -std=c11
     -Wall
     -Wextra
     -Wno-unused
@@ -65,4 +68,24 @@ endif()
 if(WIN32)
     target_include_directories(kptools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/winsup/include)
     target_link_libraries(kptools PUBLIC winsup)
+endif()
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    set(EMSCRIPTEN_LINK_OPTIONS
+        -sFORCE_FILESYSTEM
+        -sALLOW_MEMORY_GROWTH=1
+        -sENVIRONMENT=web
+        -sASSERTIONS
+        -lproxyfs.js
+        -sWASM=1
+        -sMODULARIZE=1
+        -sEXPORT_NAME=kptools
+        -sEXPORTED_RUNTIME_METHODS=["FS","PROXYFS","callMain"]
+        -sEXPORTED_FUNCTIONS=["_main","_init_kptools"]
+        -lembind
+        -s
+        -Wl,--gc-sections
+    )
+    
+    target_link_options(kptools PRIVATE ${EMSCRIPTEN_LINK_OPTIONS})
 endif()
