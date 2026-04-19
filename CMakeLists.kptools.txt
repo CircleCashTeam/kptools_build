@@ -1,15 +1,13 @@
-set(SOURCES
-	src/kp/tools/image.c
-	src/kp/tools/kallsym.c
-	src/kp/tools/kptools.c
-	src/kp/tools/order.c
-	src/kp/tools/insn.c
-	src/kp/tools/patch.c
-	src/kp/tools/symbol.c
-	src/kp/tools/kpm.c
-	src/kp/tools/common.c
-	src/kp/tools/sha256.c
-)
+if(NOT ZLIB_FOUND)
+    set(ZLIB_LIBRARIES zlibstatic)
+    set(ZLIB_INCLUDE_DIRS
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/zlib
+        ${CMAKE_CURRENT_BINARY_DIR}/src/zlib
+    )
+    set(ZLIB_FOUND ON)
+endif()
+
+add_subdirectory("${CMAKE_SOURCE_DIR}/src/kp/tools")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
     list(APPEND SOURCES "src/get_kpm_info.cc")
@@ -22,34 +20,9 @@ configure_file(
   COPYONLY
 )
 
-add_executable(kptools ${SOURCES})
-target_compile_options(
-    kptools
-    PUBLIC
-    -Wall
-    -Wextra
-    -Wno-unused
-    -Wno-unused-parameter
-)
 target_include_directories(kptools PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/kp/tools
     ${CMAKE_CURRENT_BINARY_DIR}/include
 )
-
-if(NOT ZLIB_FOUND)
-    set(ZLIB_LIBRARIES zlibstatic)
-    set(ZLIB_INCLUDE_DIRS
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/zlib
-        ${CMAKE_CURRENT_BINARY_DIR}/src/zlib
-    )
-    set(ZLIB_FOUND ON)
-endif()
-if(ZLIB_FOUND)
-    message(STATUS "Found ZLIB: ${ZLIB_LIBRARIES}")
-    target_include_directories(kptools PUBLIC ${ZLIB_INCLUDE_DIRS})
-endif()
-
-target_link_libraries(kptools PUBLIC ${ZLIB_LIBRARIES})
 
 if(PREFER_STATIC_LINKING)
     message(STATUS "Linking kptools: static")
