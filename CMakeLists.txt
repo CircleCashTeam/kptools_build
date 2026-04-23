@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+cmake_policy(SET CMP0079 NEW) # allow link in different directory
+
 project(kernelpatch_build LANGUAGES C CXX ASM)
 
 set(CMAKE_C_STANDARD 17)

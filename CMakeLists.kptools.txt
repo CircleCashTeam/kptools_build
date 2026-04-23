@@ -38,6 +38,8 @@ else()
     target_compile_options(kptools PUBLIC -DDEBUG -g)
 endif()
 
+target_link_libraries(kptools PRIVATE ${ZLIB_LIBRARIES})
+
 if(WIN32)
     target_include_directories(kptools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/winsup/include)
     target_link_libraries(kptools PUBLIC winsup)
@@ -47,7 +49,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
     set(EMSCRIPTEN_LINK_OPTIONS
         -sFORCE_FILESYSTEM
         -sALLOW_MEMORY_GROWTH=1
-        -sENVIRONMENT=web
+        -sENVIRONMENT=worker
         -sASSERTIONS
         -lproxyfs.js
         -sWASM=1
