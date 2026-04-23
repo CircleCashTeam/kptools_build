@@ -38,6 +38,7 @@ else()
     target_compile_options(kptools PUBLIC -DDEBUG -g)
 endif()
 
+target_include_directories(kptools PRIVATE ${ZLIB_INCLUDE_DIRS})
 target_link_libraries(kptools PRIVATE ${ZLIB_LIBRARIES})
 
 if(WIN32)
