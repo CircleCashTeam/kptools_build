@@ -1,18 +1,18 @@
-From 17e30dfa6ea2dd25e283ae6da6c10907634fe0b4 Mon Sep 17 00:00:00 2001
+From 6beece91753bc0fe2ca4ddd6450ca708a650af8c Mon Sep 17 00:00:00 2001
 From: affggh <879632264@qq.com>
-Date: Mon, 20 Apr 2026 19:07:48 +0800
-Subject: [PATCH] cmake: Do not link zlib in orig rules
+Date: Thu, 23 Apr 2026 14:21:47 +0800
+Subject: [PATCH] cmake: Do not link zlib in origin cmake files
 
 
 diff --git a/tools/CMakeLists.txt b/tools/CMakeLists.txt
-index c5fc64c..cea1d33 100644
+index b5b0d6d..cea1d33 100644
 --- a/tools/CMakeLists.txt
 +++ b/tools/CMakeLists.txt
 @@ -35,7 +35,3 @@ list(REMOVE_DUPLICATES LIB_INCLUDE_DIRS)
  
  target_include_directories(kptools PRIVATE ${LIB_INCLUDE_DIRS})
  target_compile_definitions(kptools PRIVATE BZ_NO_STDIO)
--#find_package(ZLIB REQUIRED)
+-find_package(ZLIB REQUIRED)
 -target_include_directories(kptools PRIVATE ${ZLIB_INCLUDE_DIRS})
 -
 -target_link_libraries(kptools PRIVATE ${ZLIB_LIBRARIES})
