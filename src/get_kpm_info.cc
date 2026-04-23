@@ -89,9 +89,4 @@ EMSCRIPTEN_BINDINGS(kptools)
     function("getKpmInfo", &getKpmInfo);
 }
 
-extern "C"
-{
-    EMSCRIPTEN_KEEPALIVE
-    void init_kptools() {}
-}
 #endif

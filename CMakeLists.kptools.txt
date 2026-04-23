@@ -57,7 +57,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
         -sMODULARIZE=1
         -sEXPORT_NAME=kptools
         -sEXPORTED_RUNTIME_METHODS=["FS","PROXYFS","callMain"]
-        -sEXPORTED_FUNCTIONS=["_main","_init_kptools"]
+        -sEXPORTED_FUNCTIONS=["_main"]
         -lembind
         -s
         -Wl,--gc-sections
