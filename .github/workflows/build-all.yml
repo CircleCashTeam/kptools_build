@@ -185,7 +185,7 @@ jobs:
       with:
         name: ${{matrix.artifact_name}}-kptools
         path: |
-          build/kptools*
+          build/src/kp/tools/kptools*
 
 #    - name: Test
 #      working-directory: ${{github.workspace}}/build
@@ -221,7 +221,7 @@ jobs:
       with:
         name: emscripten-wasm32-kptools
         path: |
-          build/kptools*
+          build/src/kp/tools/kptools*
 
   build-macos:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
@@ -254,7 +254,7 @@ jobs:
       with:
         name: macos-${{matrix.arch}}-kptools
         path: |
-          build/kptools*
+          build/src/kp/tools/kptools*
 
     
     
