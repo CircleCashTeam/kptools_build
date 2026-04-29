@@ -10,7 +10,10 @@ endif()
 add_subdirectory("${CMAKE_SOURCE_DIR}/src/kp/tools")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
-    list(APPEND SOURCES "src/get_kpm_info.cc")
+    list(APPEND SOURCES
+        "src/get_kpm_info.cc"
+        "src/web_extra.cc"
+    )
 endif()
 
 # preset.h
@@ -50,14 +53,15 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
     set(EMSCRIPTEN_LINK_OPTIONS
         -sFORCE_FILESYSTEM
         -sALLOW_MEMORY_GROWTH=1
-        -sENVIRONMENT=worker
-        -sASSERTIONS
+        -sENVIRONMENT=worker,web
+#        -sASSERTIONS
         -lproxyfs.js
         -sWASM=1
         -sMODULARIZE=1
+        -sWASM_BIGINT
         -sEXPORT_NAME=kptools
-        -sEXPORTED_RUNTIME_METHODS=["FS","PROXYFS","callMain"]
-        -sEXPORTED_FUNCTIONS=["_main"]
+        -sEXPORTED_RUNTIME_METHODS=["FS","callMain"]
+#        -sEXPORTED_FUNCTIONS=["_main"]
         -lembind
         -s
         -Wl,--gc-sections
