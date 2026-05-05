@@ -18,66 +18,42 @@
 extern "C"
 {
 #endif
-#include <kpm.h>
+#include "./kp/tools/kpm.h"
 #ifdef __cplusplus
 }
 #endif
 
 using namespace emscripten;
 
-val getKpmInfo(std::string path)
+val getKpmInfo(uintptr_t ptr, size_t len)
 {
     std::map<std::string, std::string> info;
     val obj = val::object();
+    auto raw_data = reinterpret_cast<const uint8_t *>(ptr);
 
-    emscripten_log(EM_LOG_CONSOLE, "getKpmInfo: recive path %s", path.c_str());
-    if (access(path.c_str(), F_OK) != 0)
+    kpm_info_t kpm_info = {
+        .name = nullptr,
+        .version = nullptr,
+        .license = nullptr,
+        .author = nullptr,
+        .description = nullptr,
+    };
+    int ret = get_kpm_info(
+        reinterpret_cast<const char *>(raw_data),
+        static_cast<int>(len),
+        &kpm_info);
+    if (!ret)
     {
-        emscripten_log(EM_LOG_ERROR, "Could not find path: %s", path.c_str());
-    }
-    else
-    {
-        FILE *fp = fopen(path.c_str(), "rb");
-        if (!fp)
+        emscripten_log(EM_LOG_CONSOLE, "Get module name: %s info!", kpm_info.name);
+        info["name"] = kpm_info.name;
+        info["version"] = kpm_info.version;
+        info["license"] = kpm_info.license;
+        info["author"] = kpm_info.author;
+        info["description"] = kpm_info.description;
+
+        for (auto &kv : info)
         {
-            emscripten_log(EM_LOG_ERROR, "Could not open file: %s", path.c_str());
-            return obj;
-        }
-
-        fseek(fp, 0, SEEK_END);
-        size_t size = ftell(fp);
-        fseek(fp, 0, SEEK_SET);
-
-        std::vector<uint8_t> buffer(size);
-        fread(buffer.data(), 1, size, fp);
-        if (fp)
-        {
-            fclose(fp);
-        }
-
-        kpm_info_t kpm_info = {
-            .name = nullptr,
-            .version = nullptr,
-            .license = nullptr,
-            .author = nullptr,
-            .description = nullptr,
-        };
-        int ret = get_kpm_info(
-            reinterpret_cast<const char *>(buffer.data()),
-            static_cast<int>(buffer.size()),
-            &kpm_info);
-        if (!ret)
-        {
-            emscripten_log(EM_LOG_CONSOLE, "Get module name: %s info!", kpm_info.name);
-            info["name"] = kpm_info.name;
-            info["version"] = kpm_info.version;
-            info["license"] = kpm_info.license;
-            info["author"] = kpm_info.author;
-            info["description"] = kpm_info.description;
-
-            for (auto& kv : info) {
-                obj.set(kv.first, kv.second);
-            }
+            obj.set(kv.first, kv.second);
         }
     }
 
