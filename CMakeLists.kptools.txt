@@ -10,7 +10,7 @@ endif()
 add_subdirectory("${CMAKE_SOURCE_DIR}/src/kp/tools")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
-    list(APPEND SOURCES
+    target_sources(kptools PUBLIC
         "src/get_kpm_info.cc"
         "src/web_extra.cc"
     )
