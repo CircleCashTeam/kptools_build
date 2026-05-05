@@ -54,6 +54,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
         -sFORCE_FILESYSTEM
         -sALLOW_MEMORY_GROWTH=1
         -sENVIRONMENT=worker,web
+        -sEXPORT_ES6=1
 #        -sASSERTIONS
         -lproxyfs.js
         -sWASM=1
@@ -61,8 +62,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
         -sWASM_BIGINT
         -sEXPORT_NAME=kptools
         -sEXPORTED_RUNTIME_METHODS=["FS","callMain"]
-#        -sEXPORTED_FUNCTIONS=["_main"]
-        -lembind
+        -sEXPORTED_FUNCTIONS=["_main","_malloc","_free"]
+        --bind
         -s
         -Wl,--gc-sections
     )
